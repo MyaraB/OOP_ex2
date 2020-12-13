@@ -1,0 +1,26 @@
+package src.gui;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class graphTake1 extends JFrame{
+    public graphTake1(){
+        super();
+      
+        this.setTitle("pokemonGo");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int height = dimension.height;
+        int width = dimension.width;
+
+        this.setSize(width,height);
+        this.setVisible(true);
+        ImageIcon image = new ImageIcon();
+        this.setIconImage(image.getImage());
+        this.getContentPane().setBackground(Color.CYAN);
+
+    }
+    public static void main(String[] args){
+        new graphTake1();
+    }
+}

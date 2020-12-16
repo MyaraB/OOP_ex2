@@ -2,6 +2,7 @@ package src.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.UnknownHostException;
 import javax.swing.*;
 
 public class Label extends JFrame implements ActionListener {
@@ -30,7 +31,15 @@ af = new JTextField();
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String host = af.getText();
+        try {
+            String ip = java.net.InetAddress.getByName(host).getHostAddress();
+            l.setText("IP of" + host + "is: " + ip);
 
+
+        } catch (UnknownHostException unkownHostException) {
+            unkownHostException.printStackTrace();
+        }
     }
     public static void main(String[] args) {
         new Label();

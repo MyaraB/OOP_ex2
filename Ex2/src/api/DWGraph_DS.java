@@ -9,7 +9,8 @@ public class DWGraph_DS implements directed_weighted_graph {
     private HashMap<Integer, node_data> nodes;
     private int nodeSize, edgeSize;
     private int mcCounter = 0;
-    private HashMap<Integer , HashMap<Integer , edge_data>> edges;
+    private HashMap<Integer, HashMap<Integer, edge_data>> edges;
+
     public DWGraph_DS() {
         nodes = new HashMap<>();
         edges = new HashMap<>();
@@ -19,9 +20,10 @@ public class DWGraph_DS implements directed_weighted_graph {
 
     /**
      * deep copying builder, works in O(n^2) to deep copy the nodes and the edges in between.
+     *
      * @param origin - the copied graph
      */
-    public DWGraph_DS(directed_weighted_graph origin){
+    public DWGraph_DS(directed_weighted_graph origin) {
         nodes = new HashMap<>();
         edges = new HashMap<>();
         Iterator<node_data> neigh = origin.getV().iterator();
@@ -30,9 +32,9 @@ public class DWGraph_DS implements directed_weighted_graph {
             curr = neigh.next();
             addNode(curr);
         }
-        for (int i: nodes.keySet())
-            for (int j: nodes.keySet())
-                if(origin.getEdge(i, j) != null)
+        for (int i : nodes.keySet())
+            for (int j : nodes.keySet())
+                if (origin.getEdge(i, j) != null)
                     connect(i, j, origin.getEdge(i, j).getWeight());
 
         nodeSize = origin.nodeSize();
@@ -42,6 +44,7 @@ public class DWGraph_DS implements directed_weighted_graph {
 
     /**
      * returns the node asked through the given key.
+     *
      * @param key - the node_id
      * @return
      */
@@ -52,17 +55,20 @@ public class DWGraph_DS implements directed_weighted_graph {
 
     /**
      * gets the weight of the edge between the 2 given nodes
+     *
      * @param src
      * @param src
      * @return the edge (if does not exist - null)
      */
     @Override
-    public edge_data getEdge(int src, int dest) { return edges.get(src).get(dest);
+    public edge_data getEdge(int src, int dest) {
+        return edges.get(src).get(dest);
     }
 
     /**
      * adds a given node to the graph
      * Note: if there is a node with specified key the new node will not be added.
+     *
      * @param n
      */
     @Override
@@ -72,9 +78,10 @@ public class DWGraph_DS implements directed_weighted_graph {
 
     /**
      * connects the given nodes with an edge weighted as requested.
+     *
      * @param src
      * @param dest
-     * @param w - weight of the edge connecting
+     * @param w    - weight of the edge connecting
      */
     @Override
     public void connect(int src, int dest, double w) {
@@ -114,6 +121,7 @@ public class DWGraph_DS implements directed_weighted_graph {
     /**
      * delete the given node
      * Note: deleting the node deletes all edges the node has.
+     *
      * @param key
      * @return the deleted node
      */
@@ -135,6 +143,7 @@ public class DWGraph_DS implements directed_weighted_graph {
 
     /**
      * Delete the edge from the graph.
+     *
      * @param src
      * @param dest
      * @return the edge between src and dest
@@ -174,70 +183,4 @@ public class DWGraph_DS implements directed_weighted_graph {
         return mcCounter;
     }
 
-    private static class NodeData implements node_data {
-        private geo_location location;
-        private double weight;
-        private int tag, key;
-        private String info;
-        private static int unique = 0;
-        public NodeData(){
-            this.key = unique;
-            this.info = "";
-            this.tag = 0;
-            this.weight = 0;
-            location = null;
-            unique++;
-        }
-        public NodeData(node_data n){
-            key = n.getKey();
-            info = n.getInfo();
-            tag = n.getTag();
-            weight = n.getWeight();
-            setLocation(n.getLocation());
-        }
-        @Override
-        public int getKey() {
-            return key;
-        }
-
-        @Override
-        public geo_location getLocation() {
-            return location;
-        }
-
-        @Override
-        public void setLocation(geo_location p) {
-            location = new Point3D(p.x(), p.y(), p.z());
-        }
-
-        @Override
-        public double getWeight() {
-            return weight;
-        }
-
-        @Override
-        public void setWeight(double w) {
-            weight = w;
-        }
-
-        @Override
-        public String getInfo() {
-            return info;
-        }
-
-        @Override
-        public void setInfo(String s) {
-            info = s;
-        }
-
-        @Override
-        public int getTag() {
-            return tag;
-        }
-
-        @Override
-        public void setTag(int t) {
-            tag = t;
-        }
-    }
 }

@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class MyFrame extends JFrame{
 	private int _ind;
-	private Arena _ar;
+	private static Arena _ar;
 	private gameClient.util.Range2Range _w2f;
 	MyFrame(String a) {
 		super(a);
@@ -40,24 +40,48 @@ public class MyFrame extends JFrame{
 		directed_weighted_graph g = _ar.getGraph();
 		_w2f = Arena.w2f(g,frame);
 	}
+	private double scale(double data , double r_min, double r_max, double t_min, double t_max){
+		double res = ((data - r_min)/(r_max-r_min))*(t_max-t_min)+t_min;
+		return res;
+	}
+	private static double scaleX(double data) {
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double r_min = 10;
+		double r_max = screenSize.getWidth();;
+		double t_max = 500;
+		double t_min = 0;
+		double reso = ((data - r_min) / (r_max - r_min)) * (t_max - t_min) + t_min;
+		return reso;
+	}
+	private static double scaleY(double data){
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double r_min =20;
+		double r_max = screenSize.getHeight();
+		double t_max =300;
+		double t_min =0;
+		double reso =((data - r_min)/(r_max-r_min))*(t_max-t_min)+t_min;
+		return reso;
+	}
 	public void paint(Graphics g) {
 		int w = this.getWidth();
 		int h = this.getHeight();
 		g.clearRect(0, 0, w, h);
-	//	updateFrame();
+		//	updateFrame();
 		drawPokemons(g);
 		drawGraph(g);
 		drawAgants(g);
 		drawInfo(g);
-		
+
 	}
 	private void drawInfo(Graphics g) {
 		List<String> str = _ar.get_info();
 		String dt = "none";
 		for(int i=0;i<str.size();i++) {
-			g.drawString(str.get(i)+" dt: "+dt,100,60+i*20);
+			double x = scaleX(100);
+			double y = scaleY(60+i*20);
+			g.drawString(str.get(i)+" dt: "+dt,(int)x,(int)y);
 		}
-		
+
 	}
 	private void drawGraph(Graphics g) {
 		directed_weighted_graph gg = _ar.getGraph();
@@ -77,28 +101,28 @@ public class MyFrame extends JFrame{
 	private void drawPokemons(Graphics g) {
 		List<CL_Pokemon> fs = _ar.getPokemons();
 		if(fs!=null) {
-		Iterator<CL_Pokemon> itr = fs.iterator();
-		
-		while(itr.hasNext()) {
-			
-			CL_Pokemon f = itr.next();
-			Point3D c = f.getLocation();
-			int r=10;
-			g.setColor(Color.green);
-			if(f.getType()<0) {g.setColor(Color.orange);}
-			if(c!=null) {
+			Iterator<CL_Pokemon> itr = fs.iterator();
 
-				geo_location fp = this._w2f.world2frame(c);
-				g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
-			//	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
-				
+			while(itr.hasNext()) {
+
+				CL_Pokemon f = itr.next();
+				Point3D c = f.getLocation();
+				int r=10;
+				g.setColor(Color.green);
+				if(f.getType()<0) {g.setColor(Color.orange);}
+				if(c!=null) {
+
+					geo_location fp = this._w2f.world2frame(c);
+					g.fillOval((int)scaleX(fp.x()-r), (int)scaleY(fp.y()-r), (int)scaleX(2*r), (int)scaleY(2*r));
+					//g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
+
+				}
 			}
-		}
 		}
 	}
 	private void drawAgants(Graphics g) {
 		List<CL_Agent> rs = _ar.getAgents();
-	//	Iterator<OOP_Point3D> itr = rs.iterator();
+		//	Iterator<OOP_Point3D> itr = rs.iterator();
 		g.setColor(Color.red);
 		int i=0;
 		while(rs!=null && i<rs.size()) {
@@ -108,15 +132,15 @@ public class MyFrame extends JFrame{
 			if(c!=null) {
 
 				geo_location fp = this._w2f.world2frame(c);
-				g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
+				g.fillOval((int)scaleX(fp.x()-r), (int)scaleY(fp.y()-r), (int)scaleX(2*r),(int)scaleY( 2*r));
 			}
 		}
 	}
 	private void drawNode(node_data n, int r, Graphics g) {
 		geo_location pos = n.getLocation();
 		geo_location fp = this._w2f.world2frame(pos);
-		g.fillOval((int)fp.x()-r, (int)fp.y()-r, 2*r, 2*r);
-		g.drawString(""+n.getKey(), (int)fp.x(), (int)fp.y()-4*r);
+		g.fillOval((int)(scaleX(fp.x()-r)), (int)scaleY(fp.y()-r), (int)scaleX(2*r), (int)scaleY(2*r));
+		g.drawString(""+n.getKey(), (int)scaleX(fp.x()), (int)scaleY(fp.y()-4*r));
 	}
 	private void drawEdge(edge_data e, Graphics g) {
 		directed_weighted_graph gg = _ar.getGraph();
@@ -124,7 +148,7 @@ public class MyFrame extends JFrame{
 		geo_location d = gg.getNode(e.getDest()).getLocation();
 		geo_location s0 = this._w2f.world2frame(s);
 		geo_location d0 = this._w2f.world2frame(d);
-		g.drawLine((int)s0.x(), (int)s0.y(), (int)d0.x(), (int)d0.y());
-	//	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
+		g.drawLine((int)scaleX(s0.x()), (int)scaleY(s0.y()), (int)scaleX(d0.x()), (int)scaleY(d0.y()));
+		//	g.drawString(""+n.getKey(), fp.ix(), fp.iy()-4*r);
 	}
 }

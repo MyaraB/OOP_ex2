@@ -29,6 +29,24 @@ public class Arena {
 	private List<String> _info;
 	private static Point3D MIN = new Point3D(0, 100,0);
 	private static Point3D MAX = new Point3D(0, 100,0);
+	public static Point3D MinDex;
+	public static Point3D MaxDex;
+
+	public static Point3D getMinDex() {
+		return MinDex;
+	}
+
+	public static void setMinDex(Point3D minDex) {
+		MinDex = minDex;
+	}
+
+	public static Point3D getMaxDex() {
+		return MaxDex;
+	}
+
+	public static void setMaxDex(Point3D maxDex) {
+		MaxDex = maxDex;
+	}
 
 	public Arena() {;
 		_info = new ArrayList<String>();
@@ -57,6 +75,8 @@ public class Arena {
 			if(c.x() > x1) {x1=c.x();}
 			if(c.y() > y1) {y1=c.y();}
 		}
+		MinDex = new Point3D(x0,y0,0);
+		MaxDex = new Point3D(x1,y1,0);
 		double dx = x1-x0, dy = y1-y0;
 		MIN = new Point3D(x0-dx/10,y0-dy/10);
 		MAX = new Point3D(x1+dx/10,y1+dy/10);

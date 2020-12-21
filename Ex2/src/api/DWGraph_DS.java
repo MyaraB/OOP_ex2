@@ -62,7 +62,9 @@ public class DWGraph_DS implements directed_weighted_graph {
      */
     @Override
     public edge_data getEdge(int src, int dest) {
-        return edges.get(src).get(dest);
+        if(edges.get(src) != null)
+            return edges.get(src).get(dest);
+        return null;
     }
 
     /**
@@ -73,7 +75,11 @@ public class DWGraph_DS implements directed_weighted_graph {
      */
     @Override
     public void addNode(node_data n) {
-        nodes.put(n.getKey(), n);
+        if (nodes.get(n) == null) {
+            nodes.put(n.getKey(), n);
+            nodeSize++;
+            mcCounter++;
+        }
     }
 
     /**

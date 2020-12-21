@@ -12,23 +12,37 @@ public class EdgeData implements  edge_data {
     }
     @Override
     public int getSrc() {
-        return src;
+        try {
+            return src;
+        } catch (Exception e){
+            return -1;
+        }
     }
 
     @Override
     public int getDest() {
-        return dest;
+        try {
+            return dest;
+        } catch (Exception e){
+            return -1;
+        }
     }
 
     @Override
     public double getWeight() {
-        return weight;
-    }
+        try {
+            return weight;
+        } catch (Exception e){
+            return -1;
+        }    }
 
     @Override
     public String getInfo() {
-        return info;
-    }
+        try {
+            return info;
+        } catch (Exception e){
+            return null;
+        }    }
 
     @Override
     public void setInfo(String s) {

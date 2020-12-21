@@ -181,7 +181,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     }
 
     /**
-    JSON format save for nodes.
+    JSON format save for node.
      */
     private JSONObject toJason(node_data n){
         JSONObject obj = new JSONObject();
@@ -199,7 +199,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
     }
 
     /**
-     JSON format save for edges.
+     JSON format save for edge.
      */
     private JSONObject toJason(edge_data edge){
         JSONObject obj = new JSONObject();

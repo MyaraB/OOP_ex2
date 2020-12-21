@@ -1,7 +1,12 @@
 package tests;
 
+import gameClient.util.Point3D;
 import org.junit.jupiter.api.Test;
 import api.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DWGraph_AlgoTest {
@@ -40,17 +45,45 @@ class DWGraph_AlgoTest {
 
     @Test
     void shortestPathDist() {
+        dw_graph_algorithms algo = algoCreator();
+        algo.getGraph().connect(0, 2, 6.8);
+        assertEquals(5.5, algo.shortestPathDist(0,2));
+        assertEquals(-1, algo.shortestPathDist(0,3));
+        algo.getGraph().removeEdge(0, 2);
+        algo.getGraph().removeNode(1);
+        assertEquals( -1 , algo.shortestPathDist(0, 2));
+
     }
 
     @Test
     void shortestPath() {
+        dw_graph_algorithms algo = algoCreator();
+        algo.getGraph().connect(0, 2, 6.8);
+        List<node_data> path = new ArrayList<>();
+        directed_weighted_graph graph = algo.getGraph();
+        path.add(graph.getNode(0));
+        path.add(graph.getNode(1));
+        path.add(graph.getNode(2));
+        assertEquals(path, algo.shortestPath(0,2));
+        assertEquals(null, algo.shortestPath(0,3));
+
+        algo.getGraph().removeEdge(0, 2);
+        algo.getGraph().removeNode(1);
+        assertEquals( null , algo.shortestPath(0, 2));
     }
 
     @Test
-    void save() {
-    }
-
-    @Test
-    void load() {
+    void saveAndLoad() {
+        dw_graph_algorithms algo = algoCreator();
+        algo.getGraph().getNode(0).setLocation(new Point3D(999, 999, 999));
+        algo.getGraph().getNode(1).setLocation(new Point3D(998, 998, 998));
+        algo.getGraph().getNode(2).setLocation(new Point3D(997, 997, 997));
+        algo.getGraph().getNode(0).setTag(1);
+        algo.getGraph().getEdge(0, 1).setTag(3);
+        assertEquals(true, algo.save("Graph1"));
+        dw_graph_algorithms loadedAlgo = new DWGraph_Algo();
+        assertEquals(true, loadedAlgo.load("Graph1"));
+        assertEquals(1, loadedAlgo.getGraph().getNode(0).getTag());
+        assertEquals(3, loadedAlgo.getGraph().getEdge(0, 1).getTag());
     }
 }

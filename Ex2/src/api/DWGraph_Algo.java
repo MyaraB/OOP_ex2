@@ -72,7 +72,7 @@ public class DWGraph_Algo implements dw_graph_algorithms {
                 smallest = edge;
             if (edge != null) {
                 srcWeight = myGraph.getNode(edge.getSrc()).getWeight();
-                if (srcWeight < minWeight && srcWeight != -1) {
+                if (srcWeight < minWeight && srcWeight != -1 && srcWeight + edge.getWeight() == n.getWeight()) {
                     smallest = edge;
                     minWeight = srcWeight;
                 }
@@ -124,6 +124,8 @@ public class DWGraph_Algo implements dw_graph_algorithms {
         while (firstEdges.hasNext()) {
             edge_data e = firstEdges.next();
             node_data firstNeighs = myGraph.getNode(e.getDest());
+            if (firstNeighs == null)
+                return -1;
             firstNeighs.setWeight(e.getWeight());
             q.add(firstNeighs);
         }
@@ -285,21 +287,20 @@ public class DWGraph_Algo implements dw_graph_algorithms {
             myGraph = new DWGraph_DS();
             for (int i = 0; i < nodes.length(); i++){
                 node = nodes.getJSONObject(i);
-                node_data n = new NodeData((int) node.get("key"));
-                n.setInfo((String)node.get("info"));
-                n.setWeight((double) node.get("weight"));
-                n.setTag((int) node.get("tag"));
-                String location = (String) node.get("location");
-                String[] l = location.split(",");
-                n.setLocation(new Point3D(Integer.parseInt(l[0]), Integer.parseInt(l[1]), Integer.parseInt(l[2]) ));
+                node_data n = new NodeData(node.getInt("key"));
+                n.setInfo(node.getString("info"));
+                n.setWeight((node.getDouble("weight")));
+                n.setTag(node.getInt("tag"));
+                String location = node.getString("location");
+                n.setLocation(new Point3D(location));
                 myGraph.addNode(n);
             }
             for (int j = 0; j < edges.length(); j++){
                 edge = edges.getJSONObject(j);
-                myGraph.connect((int) edge.get("source"), (int) edge.get("dest"), (double) edge.get("weight"));
-                edge_data ed = myGraph.getEdge((int) edge.get("source"), (int) edge.get("dest"));
-                ed.setTag((int) edge.get("tag"));
-                ed.setInfo((String) edge.get("info"));
+                myGraph.connect(edge.getInt("source"), edge.getInt("dest"), edge.getDouble("weight"));
+                edge_data ed = myGraph.getEdge(edge.getInt("source"), edge.getInt("dest"));
+                ed.setTag(edge.getInt("tag"));
+                ed.setInfo(edge.getString("info"));
             }
             return true;
         } catch (IOException e){
